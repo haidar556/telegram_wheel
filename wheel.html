@@ -2,516 +2,186 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-<title>عجلة الحظ</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>عجلة الفرصة</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"Tahoma",sans-serif}
+body{
+  color:#fff;
+  background:
+    radial-gradient(circle at 23% 14%,rgba(255,174,20,.50),transparent 22%),
+    radial-gradient(circle at 84% 25%,rgba(255,40,0,.38),transparent 30%),
+    radial-gradient(circle at 58% 74%,rgba(255,100,0,.32),transparent 28%),
+    linear-gradient(145deg,#ff8a00 0%,#9c1609 42%,#e91d09 70%,#741008 100%);
+  position:relative;
 }
-
-html,
-body {
-    margin: 0;
-    min-height: 100%;
-    font-family: Arial, sans-serif;
-    background: #111827;
-    color: #fff;
+body:before,body:after{content:"";position:absolute;inset:-20%;pointer-events:none}
+body:before{background:radial-gradient(ellipse at 50% 48%,transparent 20%,rgba(70,0,0,.42) 75%);filter:blur(22px)}
+body:after{background:repeating-radial-gradient(ellipse at 50% 55%,rgba(255,210,60,.05) 0 2px,transparent 2px 32px);opacity:.45;filter:blur(8px)}
+.app{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding-top:34px}
+.title{font-size:30px;font-weight:700;text-shadow:0 2px 5px #5b0800;margin:4px 0 27px;white-space:nowrap}
+.title span{font-size:34px;vertical-align:-2px;margin-left:8px}
+.wheel-wrap{width:min(92vw,610px);aspect-ratio:1;position:relative;display:flex;align-items:center;justify-content:center}
+.pointer{position:absolute;z-index:10;top:-18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:22px solid transparent;border-right:22px solid transparent;border-top:42px solid #ffd21c;filter:drop-shadow(0 3px 2px rgba(0,0,0,.45))}
+.pointer:after{content:"";position:absolute;left:-15px;top:-40px;width:30px;height:8px;background:#ffd21c;border-radius:50%}
+.wheel{
+  width:100%;height:100%;border-radius:50%;position:relative;
+  border:7px solid #ffb000;
+  box-shadow:0 0 0 2px rgba(255,221,65,.85),0 8px 22px rgba(0,0,0,.55),inset 0 0 25px rgba(255,255,255,.16);
+  overflow:hidden;
+  background:conic-gradient(from -22.5deg,
+    #d62b2b 0deg 45deg,#ff9f08 45deg 90deg,
+    #d62b2b 90deg 135deg,#ff9f08 135deg 180deg,
+    #d62b2b 180deg 225deg,#ff9f08 225deg 270deg,
+    #d62b2b 270deg 315deg,#ff9f08 315deg 360deg);
+  transition:transform 5.2s cubic-bezier(.12,.72,.08,1);
 }
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 18px;
-}
-
-.card {
-    width: min(430px, 100%);
-    text-align: center;
-    background: #1f2937;
-    border-radius: 24px;
-    padding: 20px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, .35);
-}
-
-h1 {
-    margin: 4px 0 8px;
-    font-size: 27px;
-}
-
-.sub {
-    opacity: .8;
-    margin: 0 0 18px;
-    font-size: 14px;
-}
-
-.wheel-wrap {
-    position: relative;
-    width: min(340px, 88vw);
-    height: min(340px, 88vw);
-    margin: 8px auto 22px;
-}
-
-.pointer {
-    position: absolute;
-    z-index: 5;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 16px solid transparent;
-    border-right: 16px solid transparent;
-    border-top: 32px solid #ef4444;
-    filter: drop-shadow(0 2px 2px #000);
-}
-
-.wheel {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 8px solid #f9fafb;
-    position: relative;
-    overflow: hidden;
-    transform: rotate(0deg);
-    transition: transform 5s cubic-bezier(.12, .7, .12, 1);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, .45);
-}
-
-.seg {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    left: 50%;
-    top: 0;
-    transform-origin: 0 100%;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 24px;
-    padding-left: 30px;
-    font-weight: bold;
-    font-size: 13px;
-    text-align: center;
-}
-
-.s0 {
-    transform: rotate(0deg);
-    background: #ef4444;
-}
-
-.s1 {
-    transform: rotate(51.428deg);
-    background: #f59e0b;
-}
-
-.s2 {
-    transform: rotate(102.856deg);
-    background: #10b981;
-}
-
-.s3 {
-    transform: rotate(154.284deg);
-    background: #3b82f6;
-}
-
-.s4 {
-    transform: rotate(205.712deg);
-    background: #8b5cf6;
-}
-
-.s5 {
-    transform: rotate(257.14deg);
-    background: #ec4899;
-}
-
-.s6 {
-    transform: rotate(308.568deg);
-    background: #14b8a6;
-}
-
-.center {
-    position: absolute;
-    z-index: 4;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: #111827;
-    border: 5px solid #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-}
-
-button {
-    width: 100%;
-    border: 0;
-    border-radius: 14px;
-    padding: 15px;
-    background: #22c55e;
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-#result {
-    margin-top: 16px;
-    font-size: 20px;
-    font-weight: bold;
-    min-height: 28px;
-}
-
-.note {
-    font-size: 12px;
-    opacity: .6;
-    margin-top: 12px;
-}
+/* خطوط القطاعات */
+.wheel:before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from -22.5deg,rgba(255,225,80,.95) 0deg 1deg,transparent 1deg 45deg);opacity:.55}
+.label{position:absolute;left:50%;top:50%;width:44%;height:44%;margin-left:-22%;margin-top:-22%;display:flex;align-items:flex-start;justify-content:center;pointer-events:none}
+.label span{display:block;font-size:24px;font-weight:700;line-height:1.05;text-align:center;text-shadow:0 2px 3px rgba(0,0,0,.65);white-space:nowrap;transform:translateY(-116px) rotate(0deg)}
+.l1{transform:rotate(0deg)}
+.l2{transform:rotate(45deg)}
+.l3{transform:rotate(90deg)}
+.l4{transform:rotate(135deg)}
+.l5{transform:rotate(180deg)}
+.l6{transform:rotate(225deg)}
+.l7{transform:rotate(270deg)}
+.l8{transform:rotate(315deg)}
+.l1 span,.l3 span,.l5 span,.l7 span{transform:translateY(-116px) rotate(0deg)}
+.l2 span,.l4 span,.l6 span,.l8 span{transform:translateY(-116px) rotate(0deg)}
+.center{position:absolute;z-index:12;width:92px;height:92px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);border:4px solid #ffe477;background:radial-gradient(circle at 35% 30%,#ffe66c,#f5a800 55%,#d87800);box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 2px 7px rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;color:#633500;font-size:20px;font-weight:700;cursor:pointer}
+.center:active{transform:translate(-50%,-50%) scale(.95)}
+.center.disabled{cursor:not-allowed;filter:grayscale(.15);opacity:.85}
+.info{margin-top:30px;text-align:center;text-shadow:0 2px 4px #4f0900;font-size:25px;font-weight:700;line-height:1.45}
+.info .small{margin-top:15px;font-size:24px;font-weight:500}
+.info .icon{display:inline-block;margin-left:7px;font-size:25px}
+.result{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(40,0,0,.68);backdrop-filter:blur(5px);padding:25px}
+.card{width:min(92vw,480px);background:linear-gradient(145deg,#ffb300,#c9291c);border:3px solid #ffe26a;border-radius:25px;padding:30px 20px;text-align:center;box-shadow:0 15px 45px rgba(0,0,0,.55)}
+.card .emoji{font-size:55px}.card h2{margin:8px 0;font-size:31px}.card p{font-size:23px;margin:12px 0}.card button{border:0;border-radius:15px;padding:13px 28px;font-size:21px;font-weight:700;background:#ffe05b;color:#713600;cursor:pointer}
+@media(max-height:760px){.app{padding-top:15px}.title{font-size:24px;margin-bottom:15px}.title span{font-size:28px}.label span{font-size:19px;transform:translateY(-90px)}.info{margin-top:16px;font-size:20px}.info .small{font-size:20px;margin-top:8px}.center{width:76px;height:76px;font-size:17px}}
+@media(min-width:700px){.wheel-wrap{width:560px}}
 </style>
 </head>
-
 <body>
+<div class="app">
+  <div class="title"><span>🎡</span> عجلة الفرصة</div>
 
-<div class="card">
-
-    <h1>🎁 عجلة الحظ</h1>
-
-    <p class="sub">
-        اضغط وخلّي العجلة تدور!
-    </p>
-
-    <div class="wheel-wrap">
-
-        <div class="pointer"></div>
-
-        <div id="wheel" class="wheel">
-
-            <div class="seg s0">محاولة أخرى</div>
-            <div class="seg s1">بونص 10%</div>
-            <div class="seg s2">بونص 5%</div>
-            <div class="seg s3">حظ أوفر</div>
-            <div class="seg s4">+2,000</div>
-            <div class="seg s5">+5,000</div>
-            <div class="seg s6">+10,000</div>
-
-            <div class="center">🎡</div>
-
-        </div>
-
+  <div class="wheel-wrap">
+    <div class="pointer"></div>
+    <div id="wheel" class="wheel">
+      <div class="label l1"><span>50,000 ل.س</span></div>
+      <div class="label l2"><span>30,000 ل.س</span></div>
+      <div class="label l3"><span>10,000 ل.س</span></div>
+      <div class="label l4"><span>20,000 ل.س</span></div>
+      <div class="label l5"><span>🍀 حظ أوفر</span></div>
+      <div class="label l6"><span>🎁 بونص 5%</span></div>
+      <div class="label l7"><span>🎁 بونص 10%</span></div>
+      <div class="label l8"><span>🔄 محاولة أخرى</span></div>
     </div>
+    <div id="spin" class="center">SPIN</div>
+  </div>
 
-    <button id="spinBtn">
-        🎡 ابدأ الدوران
-    </button>
+  <div class="info">
+    <div><span class="icon">🔄</span> لديك <b id="spins">0</b> لفة</div>
+    <div class="small">🎁 العجلة مجانية</div>
+  </div>
+</div>
 
-    <div id="result"></div>
-
-    <div class="note">
-        النتيجة يتم اعتمادها من البوت بعد انتهاء الدوران.
-    </div>
-
+<div id="result" class="result">
+  <div class="card">
+    <div class="emoji">🎉</div>
+    <h2>مبروك!</h2>
+    <p id="resultText"></p>
+    <button id="closeBtn">إغلاق</button>
+  </div>
 </div>
 
 <script>
+(function(){
+  const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+  if(tg){tg.ready();tg.expand();}
 
-/* =========================================
-   Telegram WebApp
-========================================= */
+  const wheel = document.getElementById('wheel');
+  const spin = document.getElementById('spin');
+  const spinsEl = document.getElementById('spins');
+  const result = document.getElementById('result');
+  const resultText = document.getElementById('resultText');
+  const closeBtn = document.getElementById('closeBtn');
 
-const tg =
-    window.Telegram &&
-    window.Telegram.WebApp
-        ? window.Telegram.WebApp
-        : null;
+  const params = new URLSearchParams(location.search);
+  const token = params.get('token') || '';
 
-if (tg) {
-    tg.ready();
-    tg.expand();
-}
+  let currentRotation = 0;
+  let busy = false;
 
+  function decodePrizeIndex(t){
+    try{
+      const raw = t.split('.')[0];
+      let b64 = raw.replace(/-/g,'+').replace(/_/g,'/');
+      while(b64.length % 4) b64 += '=';
+      const payload = decodeURIComponent(escape(atob(b64)));
+      const parts = payload.split(':');
+      const idx = Number(parts[1]);
+      return Number.isInteger(idx) ? idx : -1;
+    }catch(e){return -1;}
+  }
 
-/* =========================================
-   قراءة Token
-========================================= */
+  const prizeIndex = decodePrizeIndex(token);
+  const prizeNames = [
+    '50,000 ل.س', '30,000 ل.س', '10,000 ل.س', '20,000 ل.س',
+    'حظ أوفر', 'بونص 5%', 'بونص 10%', 'محاولة أخرى'
+  ];
 
-const params = new URLSearchParams(
-    window.location.search
-);
+  const spinsFromUrl = Number(params.get('spins'));
+  if(Number.isFinite(spinsFromUrl) && spinsFromUrl >= 0) spinsEl.textContent = String(Math.floor(spinsFromUrl));
 
-const token = params.get("token");
-
-const wheel =
-    document.getElementById("wheel");
-
-const btn =
-    document.getElementById("spinBtn");
-
-const result =
-    document.getElementById("result");
-
-let spinning = false;
-
-
-/* =========================================
-   استخراج رقم الجائزة من Token
-========================================= */
-
-function getPrizeIndexFromToken(token) {
-
-    try {
-
-        if (!token) {
-            return null;
-        }
-
-        const raw =
-            token.split(".")[0];
-
-        const padding =
-            "=".repeat(
-                (4 - (raw.length % 4)) % 4
-            );
-
-        const decoded =
-            atob(
-                raw
-                    .replace(/-/g, "+")
-                    .replace(/_/g, "/")
-                + padding
-            );
-
-        const parts =
-            decoded.split(":");
-
-        if (parts.length < 4) {
-            return null;
-        }
-
-        const prizeIndex =
-            parseInt(parts[1], 10);
-
-        if (
-            isNaN(prizeIndex) ||
-            prizeIndex < 0 ||
-            prizeIndex > 6
-        ) {
-            return null;
-        }
-
-        return prizeIndex;
-
-    } catch (e) {
-
-        console.error(
-            "TOKEN ERROR:",
-            e
-        );
-
-        return null;
+  function sendResult(){
+    if(!tg || typeof tg.sendData !== 'function'){
+      resultText.textContent = 'يجب فتح العجلة من داخل البوت.';
+      result.style.display='flex';
+      return;
     }
-}
+    try{
+      tg.sendData(JSON.stringify({token: token}));
+    }catch(e){
+      resultText.textContent = 'تعذر إرسال النتيجة للبوت.';
+      result.style.display='flex';
+    }
+  }
 
-
-/* =========================================
-   إرسال النتيجة للبوت
-========================================= */
-
-function sendResult() {
-
-    if (!tg) {
-
-        result.textContent =
-            "⚠️ افتح العجلة من داخل Telegram.";
-
-        btn.disabled = false;
-        spinning = false;
-
-        return;
+  function doSpin(){
+    if(busy) return;
+    if(!token || prizeIndex < 0 || prizeIndex >= 8){
+      resultText.textContent='رابط العجلة غير صالح.';
+      result.style.display='flex';
+      return;
     }
 
-    if (!token) {
+    busy=true;
+    spin.classList.add('disabled');
 
-        result.textContent =
-            "❌ رابط العجلة غير صالح.";
+    // مركز القطاع المطلوب، ثم نضيف عدة دورات كاملة.
+    const sectorCenter = prizeIndex * 45 + 22.5;
+    const extraTurns = 7;
+    const target = currentRotation + (extraTurns * 360) + (360 - sectorCenter);
+    currentRotation = target;
+    wheel.style.transform = 'rotate(' + target + 'deg)';
 
-        btn.disabled = false;
-        spinning = false;
+    setTimeout(function(){
+      resultText.textContent = 'ربحت: ' + prizeNames[prizeIndex];
+      result.style.display='flex';
+      setTimeout(sendResult, 900);
+    }, 5400);
+  }
 
-        return;
-    }
-
-    try {
-
-        tg.sendData(
-            JSON.stringify({
-                token: token
-            })
-        );
-
-        result.textContent =
-            "✅ تم إرسال النتيجة للبوت.";
-
-        setTimeout(() => {
-
-            try {
-                tg.close();
-            } catch (e) {}
-
-        }, 700);
-
-    } catch (e) {
-
-        console.error(
-            "SEND DATA ERROR:",
-            e
-        );
-
-        result.textContent =
-            "❌ حدث خطأ أثناء إرسال النتيجة.";
-
-        btn.disabled = false;
-        spinning = false;
-    }
-}
-
-
-/* =========================================
-   تشغيل العجلة
-========================================= */
-
-btn.addEventListener(
-    "click",
-    function () {
-
-        if (spinning) {
-            return;
-        }
-
-        if (!token) {
-
-            result.textContent =
-                "❌ رابط العجلة غير صالح.";
-
-            return;
-        }
-
-        const prizeIndex =
-            getPrizeIndexFromToken(token);
-
-        if (prizeIndex === null) {
-
-            result.textContent =
-                "❌ تعذر تحديد نتيجة العجلة.";
-
-            return;
-        }
-
-        spinning = true;
-        btn.disabled = true;
-
-        result.textContent =
-            "🎡 العجلة تدور...";
-
-
-        /* زاوية كل قسم */
-
-        const segmentAngle =
-            360 / 7;
-
-
-        /*
-         * وضع مركز الجائزة
-         * تحت المؤشر الموجود بالأعلى
-         */
-
-        const targetAngle =
-            360 -
-            (
-                prizeIndex *
-                segmentAngle +
-                segmentAngle / 2
-            );
-
-
-        /*
-         * 6 دورات كاملة
-         */
-
-        const extraRounds =
-            6 * 360;
-
-
-        const finalRotation =
-            extraRounds +
-            targetAngle;
-
-
-        wheel.style.transform =
-            "rotate(" +
-            finalRotation +
-            "deg)";
-
-
-        /* انتظار انتهاء الدوران */
-
-        setTimeout(
-            function () {
-
-                const prizeNames = [
-
-                    "🔄 محاولة أخرى",
-
-                    "🎁 بونص 10%",
-
-                    "🎁 بونص 5%",
-
-                    "🍀 حظ أوفر",
-
-                    "💰 +2,000",
-
-                    "💰 +5,000",
-
-                    "💰 +10,000"
-                ];
-
-
-                result.textContent =
-                    "🎉 " +
-                    prizeNames[prizeIndex];
-
-
-                /*
-                 * إرسال النتيجة للبوت
-                 */
-
-                setTimeout(
-                    function () {
-                        sendResult();
-                    },
-                    500
-                );
-
-            },
-            5200
-        );
-    }
-);
-
+  spin.addEventListener('click', doSpin);
+  closeBtn.addEventListener('click', function(){
+    if(tg) tg.close(); else result.style.display='none';
+  });
+})();
 </script>
-
 </body>
 </html>
